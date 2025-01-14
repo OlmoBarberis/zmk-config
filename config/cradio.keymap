@@ -75,7 +75,7 @@
 
         combo_f2 {
             timeout-ms = <150>;
-            key-positions = <14 15>;
+            key-positions = <24 25>;
             bindings = <&kp F2>;
         };
         
