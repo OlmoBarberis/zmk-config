@@ -90,7 +90,7 @@
            &trans      &trans     &trans   &trans      &trans         &kp COLON  &kp LBRC   &kp RBRC   &kp LPAR  &kp RPAR
         //├──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┤
         //│          │          │          │          │          │   │ LEFT     │ DOWN     │ UP       │ RIGHT    │  ?       │
-           &trans     &trans    &trans     &trans      &trans         &kp LEFT   &kp DOWN    &kp UP     &kp RIGHT   &kp QMARK
+           &trans     &trans    &trans     &trans      &trans         &kp K_CUT   &kp K_COPY &kp K_PASTE &kp K_UNDO &kp QMARK
         //├──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┤
         //│          │          │          │          │          │   │ '        │ [        │  ]       │ <        │  >       │
            &trans      &trans    &trans     &trans      &trans        &kp SQT     &kp LBKT   &kp RBKT   &kp LT      &kp GT
