@@ -6,10 +6,11 @@
 #include <dt-bindings/zmk/bt.h>
 
 #define COLEMAK 0
-#define NAV 1
-#define SYM 2
-#define NUM 3
-#define BT  4
+#define SYM_RIGHT 1
+#define SYM_LEFT 2
+#define NAV 3
+#define NUM  4
+#define BT  5
 
 // Home row mods macro
 #define HRML(k1,k2,k3,k4) &ht LSHFT k1  &ht LALT k2  &ht LCTRL k3  &ht LGUI k4
@@ -31,7 +32,7 @@
     conditional_layers {
         compatible = "zmk,conditional-layers";
         tri_layer {
-            if-layers = <NAV SYM>;
+            if-layers = <SYM_RIGHT SYM_LEFT>;
             then-layer = <BT>;
         };
     };
@@ -45,7 +46,7 @@
         };
         combo_minus {
             timeout-ms = <150>;
-            key-positions = <2 3 6 7>;
+            key-positions = <3 6>;
             bindings = <&kp MINUS>;
         };
         combo_esc {
@@ -56,7 +57,7 @@
 
         combo_under {
             timeout-ms = <150>;
-            key-positions = <22 23 26 27>;
+            key-positions = <4 5>;
             bindings = <&kp UNDER>;
         };
         
@@ -77,29 +78,29 @@
         //│  Z       │  X       │  C       │  V       │  B       │   │  K       │  M       │ ,        │ .        │ /        │
             &kp Z      &kp X      &kp C      &kp V      &kp B          &kp K      &kp M      &kp COMMA  &kp DOT    &kp FSLH
         //╰──────────┴──────────┴──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┴──────────┴──────────╯
-                                          &lt NUM TAB  &lt NAV SPACE   &lt SYM ENTER  &lt 1 BSPC
+                                          &lt NUM TAB  &lt SYM_RIGHT SPACE   &lt SYM_LEFT ENTER  &lt NAV BSPC
         //                                 ╰──────────┴──────────╯   ╰──────────┴──────────╯
             >;
         };
 
-        nav_layer {
+        sym_right_layer {
             bindings = <
         //╭──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────┬──────────┬──────────┬──────────┬──────────╮
-        //│          │          │          │          │          │   │          │ {        │ }        │ (        │  )       │
-           &trans      &trans     &trans     &bootloader &sys_reset    &trans     &kp LBRC   &kp RBRC   &kp LPAR  &kp RPAR
+        //│          │          │          │          │          │   │ :        │ {        │ }        │ (        │  )       │
+           &trans      &trans     &trans   &trans      &trans         &kp COLON  &kp LBRC   &kp RBRC   &kp LPAR  &kp RPAR
         //├──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┤
-        //│          │          │          │          │          │   │ LEFT     │ DOWN     │ UP       │ RIGHT    │          │
-           &trans     &trans    &trans     &trans      &trans         &kp LEFT   &kp DOWN    &kp UP     &kp RIGHT   &trans
+        //│          │          │          │          │          │   │ LEFT     │ DOWN     │ UP       │ RIGHT    │  ?       │
+           &trans     &trans    &trans     &trans      &trans         &kp LEFT   &kp DOWN    &kp UP     &kp RIGHT   &kp QMARK
         //├──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┤
-        //│          │          │          │          │          │   │          │ [        │  ]       │ >        │  <       │
-           &trans      &trans    &trans     &trans      &trans       &trans      &kp LBKT   &kp RBKT   &kp GT      &kp LT
+        //│          │          │          │          │          │   │ '        │ [        │  ]       │ <        │  >       │
+           &trans      &trans    &trans     &trans      &trans        &kp SQT     &kp LBKT   &kp RBKT   &kp LT      &kp GT
         //╰──────────┴──────────┴──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┴──────────┴──────────╯
                                              &trans     &trans        &trans     &kp BSPC
         //                                 ╰──────────┴──────────╯   ╰──────────┴──────────╯
             >;
         };
 
-        sym_layer {
+        sym_left_layer {
             bindings = <
         //╭──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────┬──────────┬──────────┬──────────┬──────────╮
         //│ =        │ `        │  *       │  &       │ \        │   │          │          │          │          │          │
@@ -115,6 +116,25 @@
         //                                 ╰──────────┴──────────╯   ╰──────────┴──────────╯
             >;
         };
+
+
+        nav_layer {
+            bindings = <
+        //╭──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────┬──────────┬──────────┬──────────┬──────────╮
+        //│          │          │          │          │          │   │          │          │          │          │          │
+           &trans      &trans     &trans     &kp UP     &trans         &trans      &trans     &trans     &trans     &trans
+        //├──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┤
+        //│          │          │          │          │          │   │          │          │          │          │          │
+           &trans      &trans    &kp LEFT   &kp DOWN   &kp RIGHT         &trans      &trans     &trans     &trans     &trans
+        //├──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┤
+        //│          │          │          │          │          │   │          │          │          │          │          │
+           &trans      &trans     &trans     &trans     &trans         &trans      &trans     &trans     &trans     &trans
+        //╰──────────┴──────────┴──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┴──────────┴──────────╯
+                                             &trans     &trans         &trans     &trans
+        //                                 ╰──────────┴──────────╯   ╰──────────┴──────────╯
+            >;
+        };
+
 
         num_layer {
             bindings = <
