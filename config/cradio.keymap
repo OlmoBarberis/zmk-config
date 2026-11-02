@@ -1,16 +1,23 @@
 // Copyright (c) 2022 The ZMK Contributors
 // SPDX-License-Identifier: MIT
+//
+// Beginner-friendly default layout for the Cradio (34 keys).
+//
+// Layers:
+//   0 base    - plain QWERTY, Shift on the bottom-row pinkies
+//   1 num_nav - numbers, arrows, copy/paste. Hold the LEFT outer thumb key.
+//   2 symbols - punctuation and brackets.    Hold the RIGHT outer thumb key
+//                                            (tap it for Enter).
+//   3 system  - Bluetooth + reset/bootloader. Hold BOTH layer keys at once.
 
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
 
-// Home row mods macro
-#define HRML(k1,k2,k3,k4) &ht LSHFT k1  &ht LALT k2  &ht LCTRL k3  &ht LGUI k4
-#define HRMR(k1,k2,k3,k4) &ht RGUI k1  &ht RCTRL k2  &ht RALT k3  &ht RSHFT k4
-
 / {
     behaviors {
+        // Hold = modifier, tap = key. Tap-preferred so normal typing is not
+        // misread as a hold.
         ht: hold_tap {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
@@ -22,6 +29,7 @@
         };
     };
 
+    // Holding layer 1 and layer 2 together activates layer 3 (system).
     conditional_layers {
         compatible = "zmk,conditional-layers";
         tri_layer {
@@ -32,58 +40,64 @@
 
     keymap {
         compatible = "zmk,keymap";
-        default_layer {
+
+        // Layer 0
+        base_layer {
             bindings = <
         //╭──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────┬──────────┬──────────┬──────────┬──────────╮
         //│  Q       │  W       │  E       │  R       │  T       │   │  Y       │  U       │  I       │  O       │  P       │
             &kp Q      &kp W      &kp E      &kp R      &kp T          &kp Y      &kp U      &kp I      &kp O      &kp P
         //├──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┤
-        //│  A       │  S       │  D       │  F       │  G       │   │  H       │  J       │  K       │  L       │ ' "      │
-            HRML(A,        S,         D,         F)     &kp G          &kp H      HRMR(J,        K,         L,        SQT)
+        //│  A       │  S       │  D       │  F       │  G       │   │  H       │  J       │  K       │  L       │  ;       │
+            &kp A      &kp S      &kp D      &kp F      &kp G          &kp H      &kp J      &kp K      &kp L      &kp SEMI
         //├──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┤
-        //│  Z       │  X       │  C       │  V       │  B       │   │  N       │  M       │ , <      │ . >      │ / ?      │
-            &kp Z      &kp X      &kp C      &kp V      &kp B          &kp N      &kp M      &kp COMMA  &kp DOT    &kp FSLH
+        //│ Z/Shift  │  X       │  C       │  V       │  B       │   │  N       │  M       │ , <      │ . >      │ / Shift  │
+            &ht LSHFT Z &kp X     &kp C      &kp V      &kp B          &kp N      &kp M      &kp COMMA  &kp DOT    &ht RSHFT FSLH
         //╰──────────┴──────────┴──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┴──────────┴──────────╯
-                                            &lt 2 TAB   &kp ENTER     &kp SPACE  &lt 1 BSPC
+        //                                  │ NUM/NAV  │  SPACE   │   │ BKSPACE  │ ENTER/SYM│
+                                            &mo 1      &kp SPACE      &kp BSPC   &lt 2 ENTER
         //                                 ╰──────────┴──────────╯   ╰──────────┴──────────╯
             >;
         };
 
-        right_layer {
+        // Layer 1: numbers, navigation, shortcuts (hold left outer thumb)
+        num_nav_layer {
             bindings = <
         //╭──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────┬──────────┬──────────┬──────────┬──────────╮
-        //│ INSERT   │  1       │  2       │  3       │          │   │ HOME     │ PAGE DN  │ PAGE UP  │ END      │  :       │
-            &kp INS    &kp N1     &kp N2     &kp N3     &trans         &kp HOME   &kp PG_DN  &kp PG_UP  &kp END    &kp COLON
+        //│  1       │  2       │  3       │  4       │  5       │   │  6       │  7       │  8       │  9       │  0       │
+            &kp N1     &kp N2     &kp N3     &kp N4     &kp N5         &kp N6     &kp N7     &kp N8     &kp N9     &kp N0
         //├──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┤
-        //│ DELETE   │  4       │  5       │  6       │          │   │ LEFT     │ DOWN     │ UP       │ RIGHT    │  ;       │
-            &kp DEL    &kp N4     &kp N5     &kp N6     &trans         &kp LEFT   &kp DOWN   &kp UP   &kp RIGHT   &kp SEMI
+        //│  ESC     │  TAB     │  CTRL    │  ALT     │  GUI     │   │  LEFT    │  DOWN    │  UP      │  RIGHT   │  DELETE  │
+            &kp ESC    &kp TAB    &kp LCTRL  &kp LALT   &kp LGUI       &kp LEFT   &kp DOWN   &kp UP     &kp RIGHT  &kp DEL
         //├──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┤
-        //│ CAPS     │  7       │  8       │  9       │  0       │   │          │          │          │          │          │
-           &caps_word  &kp N7     &kp N8     &kp N9     &kp N0         &trans     &trans     &trans     &trans     &trans
+        //│  UNDO    │  CUT     │  COPY    │  PASTE   │ CAPSWORD │   │  HOME    │  PAGE DN │  PAGE UP │  END     │  INSERT  │
+            &kp LC(Z)  &kp LC(X)  &kp LC(C)  &kp LC(V)  &caps_word     &kp HOME   &kp PG_DN  &kp PG_UP  &kp END    &kp INS
         //╰──────────┴──────────┴──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┴──────────┴──────────╯
-                                             &trans     &kp ESC        &trans     &trans
+                                             &trans     &trans         &kp DEL    &trans
         //                                 ╰──────────┴──────────╯   ╰──────────┴──────────╯
             >;
         };
 
-        left_layer {
+        // Layer 2: symbols (hold right outer thumb)
+        symbols_layer {
             bindings = <
         //╭──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────┬──────────┬──────────┬──────────┬──────────╮
-        //│          │  [       │  {       │  }       │          │   │  ^       │  (       │  )       │  ]       │  ~       │
-            &trans     &kp LBKT   &kp LBRC   &kp RBRC   &trans         &kp CARET  &kp LPAR   &kp RPAR   &kp RBKT   &kp TILDE
+        //│  !       │  @       │  #       │  $       │  %       │   │  ^       │  &       │  *       │  (       │  )       │
+            &kp EXCL   &kp AT     &kp HASH   &kp DLLR   &kp PRCNT      &kp CARET  &kp AMPS   &kp ASTRK  &kp LPAR   &kp RPAR
         //├──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┤
-        //│  !       │  @       │  #       │  $       │  %       │   │  *       │  -       │  =       │  \       │  `       │
-            &kp EXCL   &kp AT     &kp HASH   &kp DLLR   &kp PRCNT      &kp ASTRK  &kp MINUS  &kp EQUAL  &kp BSLH   &kp GRAVE
+        //│  [       │  ]       │  {       │  }       │  `       │   │  -       │  =       │  _       │  +       │  '       │
+            &kp LBKT   &kp RBKT   &kp LBRC   &kp RBRC   &kp GRAVE      &kp MINUS  &kp EQUAL  &kp UNDER  &kp PLUS   &kp SQT
         //├──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┤
-        //│          │          │          │          │          │   │  &       │  _       │  +       │  │       │          │
-            &trans     &trans     &trans     &trans     &trans         &kp AMPS   &kp UNDER  &kp PLUS   &kp PIPE   &trans
+        //│  \       │  |       │  ~       │  "       │  :       │   │  <       │  >       │  ?       │          │          │
+            &kp BSLH   &kp PIPE   &kp TILDE  &kp DQT    &kp COLON      &kp LT     &kp GT     &kp QMARK  &trans     &trans
         //╰──────────┴──────────┴──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┴──────────┴──────────╯
                                              &trans     &trans         &trans     &trans
         //                                 ╰──────────┴──────────╯   ╰──────────┴──────────╯
             >;
         };
 
-        tri_layer {
+        // Layer 3: system (hold both layer keys)
+        system_layer {
             bindings = <
         //╭──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────┬──────────┬──────────┬──────────┬──────────╮
         //│ RESET    │          │          │          │PROFILE 0 │   │          │          │          │          │  RESET   │
